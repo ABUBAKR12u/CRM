@@ -1,20 +1,18 @@
 services:
   db:
-    image: postgres:18-alpine
+    image: mysql:8.4
     environment:
-      POSTGRES_USER: erpcrm
-      POSTGRES_PASSWORD: erpcrm
-      POSTGRES_DB: erpcrm
+      MYSQL_ROOT_PASSWORD: erpcrm
+      MYSQL_DATABASE: erpcrm
     ports:
-      - "5432:5432"
+      - "3306:3306"
     volumes:
-      - pgdata:/var/lib/postgresql
-      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - mysqldata:/var/lib/mysql
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U erpcrm -d erpcrm"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-perpcrm"]
       interval: 5s
       timeout: 3s
-      retries: 10
+      retries: 20
 
   redis:
     image: redis:8-alpine
@@ -39,6 +37,7 @@ services:
     env_file: .env.development
     environment:
       DB_HOST: db
+      DB_PASS: erpcrm
       REDIS_URL: redis://redis:6379/0
       SMTP_HOST: mailpit
       SMTP_PORT: 1025
@@ -60,4 +59,4 @@ services:
     command: sh -c "alembic upgrade head && python -m app.utils.seed && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
 
 volumes:
-  pgdata:
+  mysqldata:

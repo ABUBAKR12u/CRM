@@ -8,7 +8,7 @@ from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.pool import NullPool
 
 from app.database.Base import Base
-from app.database.connection import get_db
+from app.database.connection import create_database, get_db
 from app.main import app
 from app.model.tasks import Priority, Task, TaskStatus
 from app.model.users import Role, User
@@ -28,6 +28,7 @@ def clear_rate_limits():
 
 
 async def rebuild_schema(create: bool):
+    await create_database(TEST_DB_URL)
     engine = create_async_engine(TEST_DB_URL, poolclass=NullPool)
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.drop_all)

@@ -1,6 +1,6 @@
 # ai-ops-platform
 
-Korxona rahbari va xodimlari uchun AI biznes operatsion platformasi: rolga qarab ishlaydigan boshqaruv paneli. Next.js 16 (App Router), TypeScript `strict`, Tailwind CSS 4 va Ant Design 6 asosida. Uch rol (admin, rahbar, xodim), uch til (o'zbek, rus, ingliz), Light/Dark rejim, serverda tekshiriladigan ruxsatlar. Ma'lumotlar va biznes qoidalari Python backendda (`../backend`, FastAPI + PostgreSQL).
+Korxona rahbari va xodimlari uchun AI biznes operatsion platformasi: rolga qarab ishlaydigan boshqaruv paneli. Next.js 16 (App Router), TypeScript `strict`, Tailwind CSS 4 va Ant Design 6 asosida. Uch rol (admin, rahbar, xodim), uch til (o'zbek, rus, ingliz), Light/Dark rejim, serverda tekshiriladigan ruxsatlar. Ma'lumotlar va biznes qoidalari Python backendda (`../backend`, FastAPI + MySQL).
 
 ## Hisobotlar
 
@@ -110,8 +110,8 @@ E2E uchun bir marta `npx playwright install chromium` kerak. Tayyor Chromium bo'
 
 ## Backend bilan ishlash
 
-1. Backendni ishga tushiring: `../backend` papkasida `docker compose up --build` (PostgreSQL, Redis, Mailpit va API birga ko'tariladi). Batafsil: [`../backend/README.md`](../backend/README.md).
-2. `.env.local` da `BACKEND_URL=http://localhost:8000` bo'lsin.
+1. Backendni ishga tushiring: `../backend` papkasida `docker compose up --build` (MySQL, Redis, Mailpit va API birga ko'tariladi). Batafsil: [`../backend/README.md`](../backend/README.md).
+2. `.env.local` da `BACKEND_URL=http://127.0.0.1:8000` bo'lsin.
 3. `npm run dev` va `http://localhost:3000`.
 
 Brauzer backendga to'g'ridan-to'g'ri murojaat qilmaydi: `src/app/api/*` route'lari va server komponentlar `src/lib/data/service.ts` orqali backendni chaqiradi. Backend tokeni httpOnly sessiya cookie'si ichida saqlanadi. Rol va hisob holati har so'rovda backenddan olinadi (`/auth/me`), shuning uchun bloklangan hisob darhol chiqib ketadi.
@@ -122,7 +122,7 @@ Parolni tiklash havolasini backend SMTP orqali yuboradi (dev'da Mailpit: `http:/
 
 ## E2E testlar
 
-Playwright avval backendni alohida `erpcrm_e2e` bazasida ko'taradi (`alembic upgrade head`, `seed --reset`, uvicorn :8100), keyin `next start` (:3100). Kerakli narsalar: PostgreSQL (`docker compose up -d db` yoki o'zingizniki), backend kutubxonalari va `npm run build`.
+Playwright avval backendni alohida `erpcrm_e2e` bazasida ko'taradi (`alembic upgrade head`, `seed --reset`, uvicorn :8100), keyin `next start` (:3100). Kerakli narsalar: MySQL (`backend\.env` dagi login bilan; `erpcrm_e2e` bazasi o'zi yaratiladi), backend kutubxonalari va `npm run build`.
 
 ```bash
 E2E_PYTHON=../backend/.venv/bin/python npm run test:e2e

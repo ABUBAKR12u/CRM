@@ -14,7 +14,7 @@ class TestSettings:
     def test_database_url_escapes_password(self):
         settings = Settings(_env_file=None, **{**DB, "DB_PASS": "p@ss:w/rd"})
         url = settings.DATABASE_URL
-        assert url.drivername == "postgresql+asyncpg"
+        assert url.drivername == "mysql+aiomysql"
         assert url.password == "p@ss:w/rd"
 
     def test_cors_origins_from_env(self, monkeypatch: pytest.MonkeyPatch):

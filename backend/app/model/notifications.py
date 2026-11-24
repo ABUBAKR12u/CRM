@@ -1,10 +1,10 @@
 from datetime import datetime
 from enum import StrEnum
 
-from sqlalchemy import JSON, DateTime, ForeignKey
+from sqlalchemy import JSON, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
 
-from app.database.Base import Base, str_enum, utcnow
+from app.database.Base import Base, UTCDateTime, str_enum, utcnow
 
 
 class NotificationKey(StrEnum):
@@ -28,4 +28,4 @@ class Notification(Base):
     task_id: Mapped[int | None] = mapped_column(ForeignKey("tasks.id", ondelete="CASCADE"), index=True)
     params: Mapped[dict[str, str]] = mapped_column(JSON, default=dict)
     read: Mapped[bool] = mapped_column(default=False)
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+    created_at: Mapped[datetime] = mapped_column(UTCDateTime, default=utcnow)

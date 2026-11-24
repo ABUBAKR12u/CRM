@@ -1,10 +1,10 @@
 from datetime import date, datetime
 from enum import StrEnum
 
-from sqlalchemy import DateTime, ForeignKey, String
+from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.database.Base import Base, str_enum, utcnow
+from app.database.Base import Base, UTCDateTime, str_enum, utcnow
 from app.model.users import User
 
 
@@ -33,8 +33,8 @@ class Task(Base):
     priority: Mapped[Priority] = mapped_column(str_enum(Priority, "task_priority"))
     due: Mapped[date]
     note: Mapped[str | None] = mapped_column(String(300))
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
-    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, onupdate=utcnow)
+    created_at: Mapped[datetime] = mapped_column(UTCDateTime, default=utcnow)
+    updated_at: Mapped[datetime] = mapped_column(UTCDateTime, default=utcnow, onupdate=utcnow)
 
     assignee: Mapped[User] = relationship(foreign_keys=[assignee_id], lazy="joined")
     creator: Mapped[User | None] = relationship(foreign_keys=[creator_id], lazy="joined")

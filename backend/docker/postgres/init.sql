@@ -1,2 +1,0 @@
-CREATE DATABASE erpcrm_test;
-CREATE DATABASE erpcrm_e2e;

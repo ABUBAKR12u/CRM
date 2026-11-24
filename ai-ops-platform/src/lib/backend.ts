@@ -5,7 +5,7 @@ import "server-only";
  * chiqmaydi, u Next.js sessiya cookie'si ichida saqlanadi. Xato kodlari backenddan o'zgarishsiz
  * keladi va klientda `apiErrors.<kod>` orqali tarjima qilinadi.
  */
-const BACKEND_URL = (process.env.BACKEND_URL ?? "http://localhost:8000").replace(
+const BACKEND_URL = (process.env.BACKEND_URL ?? "http://127.0.0.1:8000").replace(
   /\/+$/,
   "",
 );

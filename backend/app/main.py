@@ -4,6 +4,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
+
 from app.database.connection import engine
 from app.routers.auth import router as auth_router
 from app.routers.dashboard import router as dashboard_router

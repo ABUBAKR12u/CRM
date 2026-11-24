@@ -1,10 +1,10 @@
 from datetime import datetime
 from enum import StrEnum
 
-from sqlalchemy import DateTime, ForeignKey, String
+from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column
 
-from app.database.Base import Base, str_enum, utcnow
+from app.database.Base import Base, UTCDateTime, str_enum, utcnow
 
 
 class Role(StrEnum):
@@ -24,4 +24,4 @@ class User(Base):
     dept: Mapped[str] = mapped_column(String(60))
     manager_id: Mapped[int | None] = mapped_column(ForeignKey("users.id", ondelete="SET NULL"), index=True)
     active: Mapped[bool] = mapped_column(default=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+    created_at: Mapped[datetime] = mapped_column(UTCDateTime, default=utcnow)

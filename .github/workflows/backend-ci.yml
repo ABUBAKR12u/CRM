@@ -35,22 +35,20 @@ jobs:
   test:
     runs-on: ubuntu-latest
     services:
-      postgres:
-        image: postgres:18-alpine
+      mysql:
+        image: mysql:8.4
         env:
-          POSTGRES_USER: erpcrm
-          POSTGRES_PASSWORD: erpcrm
-          POSTGRES_DB: erpcrm
-        ports: ["5432:5432"]
+          MYSQL_ROOT_PASSWORD: erpcrm
+        ports: ["3306:3306"]
         options: >-
-          --health-cmd "pg_isready -U erpcrm -d erpcrm"
-          --health-interval 5s --health-timeout 3s --health-retries 10
+          --health-cmd "mysqladmin ping -h 127.0.0.1 -uroot -perpcrm"
+          --health-interval 5s --health-timeout 3s --health-retries 20
     env:
       ENVIRONMENT: development
-      DB_USERNAME: erpcrm
+      DB_USERNAME: root
       DB_PASS: erpcrm
-      DB_HOST: localhost
-      DB_PORT: 5432
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3306
       DB_NAME: erpcrm
     steps:
       - uses: actions/checkout@v5
@@ -60,8 +58,6 @@ jobs:
           cache: pip
           cache-dependency-path: backend/requirements*.txt
       - run: pip install -r requirements-dev.txt
-      - name: Create test database
-        run: psql postgresql://erpcrm:erpcrm@localhost:5432/erpcrm -c "CREATE DATABASE erpcrm_test"
       - name: Migrations apply cleanly and are reversible
         run: |
           alembic upgrade head

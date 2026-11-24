@@ -4,14 +4,14 @@ Korxona rahbari va xodimlari uchun AI biznes operatsion platformasi: rolga qarab
 
 | Papka | Nima | Texnologiya |
 | --- | --- | --- |
-| [`backend/`](./backend) | API, biznes qoidalari, ma'lumotlar bazasi | Python 3.14, FastAPI, SQLAlchemy (async), PostgreSQL, Alembic, Redis |
+| [`backend/`](./backend) | API, biznes qoidalari, ma'lumotlar bazasi | Python 3.14, FastAPI, SQLAlchemy (async), MySQL, Alembic, Redis |
 | [`ai-ops-platform/`](./ai-ops-platform) | Veb interfeys | Next.js 16, TypeScript, Tailwind CSS 4, Ant Design 6, next-intl |
 | [`.github/workflows/`](./.github/workflows) | CI | GitHub Actions |
 | [`docs/`](./docs) | Qilingan ishlar hisoboti | |
 
 ## Ishga tushirish
 
-Kerak bo'ladi: Python 3.14, Node.js 20+, PostgreSQL (yoki Docker Desktop).
+Kerak bo'ladi: Python 3.14, Node.js 20+, MySQL 8 (yoki Docker Desktop).
 
 ### 1-yo'l: Docker bilan (eng oson)
 
@@ -20,17 +20,18 @@ cd backend
 docker compose up --build
 ```
 
-PostgreSQL, Redis, Mailpit va API birga ko'tariladi, migratsiya va demo ma'lumotlar avtomatik. API: <http://localhost:8000/docs>, yuborilgan xatlar: <http://localhost:8025>.
+MySQL, Redis, Mailpit va API birga ko'tariladi, migratsiya va demo ma'lumotlar avtomatik. API: <http://localhost:8000/docs>, yuborilgan xatlar: <http://localhost:8025>.
 
 ### 2-yo'l: Docker'siz (Windows)
 
-1. PostgreSQL o'rnating va `psql` da bir marta bajaring:
+1. MySQL ishlab turgan bo'lsin. `backend\.env` faylini yarating (repoga kirmaydi) va MySQL login'ini yozing:
 
-   ```sql
-   CREATE ROLE erpcrm LOGIN PASSWORD 'erpcrm';
-   CREATE DATABASE erpcrm OWNER erpcrm;
-   CREATE DATABASE erpcrm_test OWNER erpcrm;
    ```
+   DB_USERNAME=root
+   DB_PASS=sizning_parolingiz
+   ```
+
+   `erpcrm` bazasini qo'lda yaratish shart emas: `alembic upgrade head` uni o'zi yaratadi (testlar `erpcrm_test` ni ham).
 
 2. Backend (birinchi marta):
 

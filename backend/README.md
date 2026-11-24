@@ -1,6 +1,6 @@
 # AI Ops Platform — backend
 
-`ai-ops-platform` frontendi uchun backend: FastAPI, SQLAlchemy (async), PostgreSQL. Frontenddagi mock (`src/lib/data/service.ts`, `src/lib/mock/users.ts`) qoidalari shu yerda serverda bajariladi: rollar, vazifa holatlari, kim nimani ko'radi va boshqaradi, login limiti va parol tiklash.
+`ai-ops-platform` frontendi uchun backend: FastAPI, SQLAlchemy (async), MySQL. Frontenddagi mock (`src/lib/data/service.ts`, `src/lib/mock/users.ts`) qoidalari shu yerda serverda bajariladi: rollar, vazifa holatlari, kim nimani ko'radi va boshqaradi, login limiti va parol tiklash.
 
 ## Tuzilma
 
@@ -26,14 +26,14 @@ Yangi bo'lim qo'shilganda bir xil nomdagi uchta fayl yaratiladi: `app/model/<nom
 ## Ishga tushirish (Docker)
 
 1. `backend` papkasida `docker compose up --build` buyrug'ini bajaring.
-2. PostgreSQL, Redis, Mailpit va API ko'tariladi. API migratsiyalarni bajaradi, demo ma'lumotlarni yaratadi va `--reload` bilan ishlaydi.
+2. MySQL, Redis, Mailpit va API ko'tariladi. API migratsiyalarni bajaradi, demo ma'lumotlarni yaratadi va `--reload` bilan ishlaydi.
    Yuborilgan xatlar (parol tiklash): <http://localhost:8025>.
 3. Brauzerda <http://localhost:8000/docs> manzilini oching. `Authorize` tugmasida demo email va parol bilan kirish mumkin.
 
 ## Ishga tushirish (Docker'siz)
 
 1. Kutubxonalarni o'rnating: `pip install -r requirements-dev.txt`.
-2. PostgreSQL'da `erpcrm` va `erpcrm_test` bazalarini yarating yoki `docker compose up -d db` bilan ko'taring.
+2. `.env` faylida MySQL login'ini yozing (`DB_USERNAME`, `DB_PASS`). Bazalar (`erpcrm`, testlar uchun `erpcrm_test`) birinchi migratsiyada o'zi yaratiladi.
 3. Migratsiyalar: `python -m alembic upgrade head`.
 4. Demo ma'lumotlar: `python -m app.utils.seed` (bazani tozalab qayta yaratish: `--reset`).
 5. Server: `python -m uvicorn app.main:app --reload`.
@@ -82,7 +82,7 @@ Vazifa holatlari: xodim `todo → in_progress → review` (va `in_progress → t
 
 ## Muhitlar
 
-Muhit `ENVIRONMENT` bilan tanlanadi: `development` (default), `staging`, `production`. Sozlamalar tartibi: tizim env o'zgaruvchilari, `.env.<ENVIRONMENT>`, `.env`.
+Muhit `ENVIRONMENT` bilan tanlanadi: `development` (default), `staging`, `production`. Sozlamalar tartibi: tizim env o'zgaruvchilari, keyin `.env` (shaxsiy, repoga kirmaydi), keyin `.env.<ENVIRONMENT>`.
 
 | O'zgaruvchi | Default | Izoh |
 | --- | --- | --- |
@@ -90,7 +90,7 @@ Muhit `ENVIRONMENT` bilan tanlanadi: `development` (default), `staging`, `produc
 | `ACCESS_TOKEN_MINUTES` | `480` | Sessiya muddati (8 soat) |
 | `RESET_TOKEN_MINUTES` | `15` | Parol tiklash havolasi muddati |
 | `DB_USERNAME`, `DB_PASS`, `DB_NAME` | — | Majburiy |
-| `DB_HOST`, `DB_PORT` | `localhost`, `5432` | |
+| `DB_HOST`, `DB_PORT` | `127.0.0.1`, `3306` | |
 | `DEBUG` | `false` | Production'da `true` bo'lsa ilova ishga tushmaydi |
 | `DOCS_ENABLED` | `true` | `false` bo'lsa `/docs`, `/redoc`, `/openapi.json` yopiladi |
 | `CORS_ORIGINS` | `[]` | JSON ro'yxat: `["https://app.example.uz"]` |

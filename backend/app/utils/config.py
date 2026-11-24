@@ -16,7 +16,7 @@ ENVIRONMENT = os.getenv("ENVIRONMENT", Environment.DEVELOPMENT)
 
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=(".env", f".env.{ENVIRONMENT}"), extra="ignore")
+    model_config = SettingsConfigDict(env_file=(f".env.{ENVIRONMENT}", ".env"), extra="ignore")
 
     ENVIRONMENT: Environment = Environment.DEVELOPMENT
     PROJECT_NAME: str = "AI Ops Platform API"
@@ -34,8 +34,8 @@ class Settings(BaseSettings):
 
     DB_USERNAME: str
     DB_PASS: str
-    DB_HOST: str = "localhost"
-    DB_PORT: int = 5432
+    DB_HOST: str = "127.0.0.1"
+    DB_PORT: int = 3306
     DB_NAME: str
     DB_POOL_SIZE: int = 5
     DB_MAX_OVERFLOW: int = 10
@@ -52,12 +52,13 @@ class Settings(BaseSettings):
     @property
     def DATABASE_URL(self) -> URL:
         return URL.create(
-            "postgresql+asyncpg",
+            "mysql+aiomysql",
             username=self.DB_USERNAME,
             password=self.DB_PASS,
             host=self.DB_HOST,
             port=self.DB_PORT,
             database=self.DB_NAME,
+            query={"charset": "utf8mb4"},
         )
 
     @model_validator(mode="after")
