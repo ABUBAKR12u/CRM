@@ -1,0 +1,9 @@
+.env
+.env.staging
+.env.production
+.idea/
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.coverage
